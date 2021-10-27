@@ -1,5 +1,5 @@
 # CCMI_Test
- Embedded code to test the TI Hercules LAUNCHXL2-570LC43 / RM57Lx on the Central Control Module Interface (CCMI) PCB designed by Anteater Electric Racing (AER)'s Electronics Team
+ Embedded code to test the TI Hercules LAUNCHXL2-570LC43 / RM57Lx on the Central Control Module Interface (CCMI) PCB designed by UCI's Anteater Electric Racing (AER)'s Electronics Subteam
 
 ## Folder and File Contents
 source: The location for the source code that executes functions.\
@@ -17,8 +17,8 @@ Designed by: Electronics Subteam of Anteater Electric Racing (AER) at the Univer
 Advised by: Dr. J. Michael McCarthy
 
 ## Contributions/Dependencies
-IDEs used to generate hardware abstraction layer code:
-HALCOGEN
+IDEs used to generate hardware abstraction layer code:\
+HALCOGEN\
 Code Composer Studio
 
 Thanks to the contributions from these GitHub libraries:
