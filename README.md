@@ -17,7 +17,7 @@ Designed by: Electronics Subteam of Anteater Electric Racing (AER) at the Univer
 Advised by: Dr. J. Michael McCarthy
 
 ## Contributions/Dependencies
-IDEs used to generate hardware abstraction layer code:\
+IDEs used to generate and edit hardware abstraction layer code:\
 HALCOGEN\
 Code Composer Studio
 
