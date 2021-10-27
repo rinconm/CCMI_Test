@@ -50,6 +50,7 @@
 #include "HL_sys_common.h"
 
 /* USER CODE BEGIN (1) */
+#include "gio.h"
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -61,11 +62,35 @@
 */
 
 /* USER CODE BEGIN (2) */
+// Pin Values
+int APPS_PIN = ;
+int BSE_PIN = ;
+int INTERRUPT_PIN = ;
+// Boolean Variables
+bool APPS = 0;
+bool BSE = 0;
+bool INTERRUPT = 0;
 /* USER CODE END */
 
-int main(void)
+void main(void)
 {
 /* USER CODE BEGIN (3) */
+    gioInit();
+    APPS = APPSINDICATOR();
+    BSE = BSEINDICSTOR();
+    INTERRUPT = INTERRUPTINDICATOR();
+    while(1) {
+        if (APPS)  {
+            gioToggleBit(gioPORTA, APPS_PIN;
+        }
+                         
+        if (BSE)  {
+            gioToggleBit(gioPORTA, BSE_PIN;
+        }
+        if (INTERRUPT))  {
+            gioToggleBit(gioPORTA, INTERRUPT_PIN;
+        }
+    }
 /* USER CODE END */
 
     return 0;
@@ -73,4 +98,17 @@ int main(void)
 
 
 /* USER CODE BEGIN (4) */
+// Detect APPS
+bool APPSINDICATOR() {
+    // fill
+}
+
+bool BSEINDICATOR() {
+    // fill
+}
+
+bool INTERRUPTINDICATOR() {
+    // fill
+}
+
 /* USER CODE END */
