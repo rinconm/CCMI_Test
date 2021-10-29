@@ -18,8 +18,8 @@ Advised by: Dr. J. Michael McCarthy
 
 ## Contributions/Dependencies
 IDEs used to generate and edit hardware abstraction layer code:\
- HALCOGEN\
- Code Composer Studio
+\tHALCOGEN\
+\tCode Composer Studio
 
 Thanks to the contributions from these GitHub libraries:
 
