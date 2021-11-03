@@ -50,7 +50,7 @@
 #include "HL_sys_common.h"
 
 /* USER CODE BEGIN (1) */
-#include "gio.h"
+#include "HL_gio.h"
 /* USER CODE END */
 
 /** @fn void main(void)
