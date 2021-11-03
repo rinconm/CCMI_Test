@@ -51,6 +51,8 @@
 
 /* USER CODE BEGIN (1) */
 #include "HL_gio.h"
+#include "HL_rti.h"
+#include "HL_sys_core.h"
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -63,6 +65,7 @@
 
 /* USER CODE BEGIN (2) */
 // Pin Values
+/*
 int APPS_PIN = ;
 int BSE_PIN = ;
 int INTERRUPT_PIN = ;
@@ -70,12 +73,34 @@ int INTERRUPT_PIN = ;
 bool APPS = 0;
 bool BSE = 0;
 bool INTERRUPT = 0;
+*/
 /* USER CODE END */
 
-void main(void)
+int main(void)
 {
 /* USER CODE BEGIN (3) */
+    // Initializations
     gioInit();
+    rtiInit();
+
+    // Enable IRQ
+    _enable_IRQ_interrupt_();
+
+    // Enable RTI Notification
+    rtiEnableNotification(rtiREG1, rtiNOTIFICATION_COMPARE0);
+
+
+    //Set Initial state of User LEDs
+    gioSetBit(gioPORTB, 6, 1);
+    gioSetBit(gioPORTB, 7, 0);
+
+    // Start RTI counter
+    rtiStartCounter(rtiREG1, rtiCOUNTER_BLOCK0);
+
+    // Run Forever (Will be interrupted to change states)
+    while (1);
+
+    /*
     APPS = APPSINDICATOR();
     BSE = BSEINDICSTOR();
     INTERRUPT = INTERRUPTINDICATOR();
@@ -91,6 +116,8 @@ void main(void)
             gioToggleBit(gioPORTA, INTERRUPT_PIN;
         }
     }
+    */
+
 /* USER CODE END */
 
     return 0;
@@ -98,6 +125,14 @@ void main(void)
 
 
 /* USER CODE BEGIN (4) */
+//RTI Notification implementation
+void rtiNotification(rtiBASE_t *rtiREG, uint32 notification)
+{
+gioToggleBit(gioPORTB, 6);
+gioToggleBit(gioPORTB, 7);
+}
+
+/*
 // Detect APPS
 bool APPSINDICATOR() {
     // fill
@@ -110,5 +145,5 @@ bool BSEINDICATOR() {
 bool INTERRUPTINDICATOR() {
     // fill
 }
-
+*/
 /* USER CODE END */
