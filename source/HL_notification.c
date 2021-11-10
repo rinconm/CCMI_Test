@@ -49,6 +49,7 @@
 /* Include Files */
 
 #include "HL_esm.h"
+#include "HL_can.h"
 #include "HL_gio.h"
 #include "HL_rti.h"
 #include "HL_epc.h"
@@ -117,6 +118,32 @@ void rtiNotification(rtiBASE_t *rtiREG, uint32 notification)
 }
 
 /* USER CODE BEGIN (13) */
+/* USER CODE END */
+#pragma WEAK(canErrorNotification)
+void canErrorNotification(canBASE_t *node, uint32 notification)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (16) */
+/* USER CODE END */
+}
+
+#pragma WEAK(canStatusChangeNotification)
+void canStatusChangeNotification(canBASE_t *node, uint32 notification)  
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (17) */
+/* USER CODE END */
+}
+
+#pragma WEAK(canMessageNotification)
+void canMessageNotification(canBASE_t *node, uint32 messageBox)  
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (18) */
+/* USER CODE END */
+}
+
+/* USER CODE BEGIN (19) */
 /* USER CODE END */
 #pragma WEAK(gioNotification)
 void gioNotification(gioPORT_t *port, uint32 bit)

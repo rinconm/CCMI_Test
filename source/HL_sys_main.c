@@ -50,9 +50,11 @@
 #include "HL_sys_common.h"
 
 /* USER CODE BEGIN (1) */
+// header files for GIO, RTI, and CAN services
 #include "HL_gio.h"
 #include "HL_rti.h"
 #include "HL_sys_core.h"
+#include "HL_can.h"
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -80,8 +82,10 @@ int main(void)
 {
 /* USER CODE BEGIN (3) */
     // Initializations
-    gioInit();
-    rtiInit();
+    gioInit();                  // General Input Output Pins
+    rtiInit();                  // ReTurn from Interrupt Functionality
+    canInit();                  // //Initiate DCAN module
+
 
     // Enable IRQ
     _enable_IRQ_interrupt_();
@@ -97,12 +101,19 @@ int main(void)
     // Start RTI counter
     rtiStartCounter(rtiREG1, rtiCOUNTER_BLOCK0);
 
+    /*Transmit data within tx_data buffer
+      canREG1 refers to DCAN module 1
+      canMESSAGE_BOX1 refers to CAN ID 0x01
+      tx_data is the data buffer being sent over CAN
+    */
+    canTransmit(canREG1,canMESSAGE_BOX1, tx_data);
+
     // Run Forever (Will be interrupted to change states)
     while (1);
 
-    /*
+    /* Intended for main execution but not sure where to place yet
     APPS = APPSINDICATOR();
-    BSE = BSEINDICSTOR();
+    BSE = BSEINDICATOR();
     INTERRUPT = INTERRUPTINDICATOR();
     while(1) {
         if (APPS)  {
@@ -132,7 +143,39 @@ gioToggleBit(gioPORTB, 6);
 gioToggleBit(gioPORTB, 7);
 }
 
-/*
+//Function to verify that packets sent and received are intended values
+uint32_t checkPackets(uint8_t *src_packet,uint8_t *dst_packet,uint32_t psize){
+    uint32_t err=0;
+    uint32_t cnt=psize;
+
+    while(cnt--){
+        if((*src_packet++) != (*dst_packet++)){
+            err++;
+        }
+    }
+    return(err);
+}
+
+// All functions below need to be declared for CAN to function, but
+// are only used when using intterupt vectors for CAN
+void canMessageNotification(canBASE_t *node, uint32_t messageBox){
+    return;
+}
+
+void canErrorNotification(canBASE_t *node, uint32_t messageBox){
+    return;
+}
+
+void esmGroup1Notification(unsigned channel){
+    return;
+}
+
+void esmGroup2Notification(unsigned channel)
+{
+    return;
+}
+
+/* All functions below are functions intended for operation
 // Detect APPS
 bool APPSINDICATOR() {
     // fill
