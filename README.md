@@ -1,9 +1,9 @@
 # CCMI_Test
- Embedded code to test the TI Hercules LAUNCHXL2-570LC43 / RM57Lx on the Central Control Module Interface (CCMI) PCB designed by UCI's Anteater Electric Racing (AER)'s Electronics Subteam
+Embedded code to test the TI Hercules LAUNCHXL2-570LC43/RM57Lx on the Central Control Module Interface (CCMI) PCB designed by UCI's Anteater Racing (AER)'s Electronics Subteam
 
 ## Folder and File Contents
-source: The location for the source code that executes functions.\
-include: The location for the header files containing the declarations and definitions of the API.\
+source: Location for the source code that executes functions.\
+include: Location for the header files containing the declarations and definitions of the API.\
 main program: HL_sys_main.c
 
 ## CCMI Overview
@@ -13,13 +13,16 @@ The CCMI controls various functions of the FSAE race car including motor speed, 
 
 ## Team Info
 Code written by: Marcos Rincon\
-CCMI Designed by: Electronics Subteam of Anteater Electric Racing (AER) at the University of California, Irvine\
+CCMI Designed by: Electronics Subteam of Anteater Racing (AER) at the University of California, Irvine\
 Advised by: Dr. J. Michael McCarthy
 
 ## Contributions/Dependencies
 IDEs used to generate and edit hardware abstraction layer code:\
 HALCOGEN\
 Code Composer Studio
+
+Documentation and resources:/
+UCI's Anteater Racing (AER)
 
 Thanks to the contributions from these GitHub libraries:
 
