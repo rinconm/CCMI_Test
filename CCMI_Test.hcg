@@ -296,14 +296,18 @@
       <HDRCAN>
         <NAME>HL_can.h</NAME>
       </HDRCAN>
-      <SRCCAN/>
+      <SRCCAN>
+        <NAME>HL_can.c</NAME>
+      </SRCCAN>
       <HDRADC_R>
         <NAME>HL_reg_adc.h</NAME>
       </HDRADC_R>
       <HDRADC>
         <NAME>HL_adc.h</NAME>
       </HDRADC>
-      <SRCADC/>
+      <SRCADC>
+        <NAME>HL_adc.c</NAME>
+      </SRCADC>
       <HET1ASMHDR>
         <NAME/>
       </HET1ASMHDR>
@@ -325,7 +329,9 @@
       <HDRHTU>
         <NAME>HL_htu.h</NAME>
       </HDRHTU>
-      <SRCHET/>
+      <SRCHET>
+        <NAME>HL_het.c</NAME>
+      </SRCHET>
       <HET2ASMHDR>
         <NAME/>
       </HET2ASMHDR>
@@ -588,7 +594,7 @@
         <PATH>include\HL_can.h</PATH>
       </HDRCAN>
       <SRCCAN>
-        <PATH/>
+        <PATH>source\HL_can.c</PATH>
       </SRCCAN>
     </FILENAMES>
   </CAN>
@@ -601,7 +607,7 @@
         <PATH>include\HL_adc.h</PATH>
       </HDRADC>
       <SRCADC>
-        <PATH/>
+        <PATH>source\HL_adc.c</PATH>
       </SRCADC>
     </FILENAMES>
   </ADC>
@@ -623,7 +629,7 @@
         <PATH>include\HL_htu.h</PATH>
       </HDRHTU>
       <SRCHET>
-        <PATH/>
+        <PATH>source\HL_het.c</PATH>
       </SRCHET>
     </FILENAMES>
   </HET>

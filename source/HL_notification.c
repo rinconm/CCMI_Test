@@ -49,8 +49,10 @@
 /* Include Files */
 
 #include "HL_esm.h"
+#include "HL_adc.h"
 #include "HL_can.h"
 #include "HL_gio.h"
+#include "HL_het.h"
 #include "HL_rti.h"
 #include "HL_epc.h"
 #include "HL_sys_dma.h"
@@ -119,6 +121,16 @@ void rtiNotification(rtiBASE_t *rtiREG, uint32 notification)
 
 /* USER CODE BEGIN (13) */
 /* USER CODE END */
+#pragma WEAK(adcNotification)
+void adcNotification(adcBASE_t *adc, uint32 group)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (14) */
+/* USER CODE END */
+}
+
+/* USER CODE BEGIN (15) */
+/* USER CODE END */
 #pragma WEAK(canErrorNotification)
 void canErrorNotification(canBASE_t *node, uint32 notification)
 {
@@ -157,6 +169,36 @@ void gioNotification(gioPORT_t *port, uint32 bit)
 /* USER CODE END */
 
 
+#pragma WEAK(pwmNotification)
+void pwmNotification(hetBASE_t * hetREG,uint32 pwm, uint32 notification)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (38) */
+/* USER CODE END */
+}
+
+/* USER CODE BEGIN (39) */
+/* USER CODE END */
+#pragma WEAK(edgeNotification)
+void edgeNotification(hetBASE_t * hetREG,uint32 edge)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (40) */
+/* USER CODE END */
+}
+
+/* USER CODE BEGIN (41) */
+/* USER CODE END */
+#pragma WEAK(hetNotification)
+void hetNotification(hetBASE_t *het, uint32 offset)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (42) */
+/* USER CODE END */
+}
+
+/* USER CODE BEGIN (43) */
+/* USER CODE END */
 
 
 /* USER CODE BEGIN (46) */

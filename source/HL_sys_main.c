@@ -43,6 +43,10 @@
 
 
 /* USER CODE BEGIN (0) */
+// ================================================================================
+// Section: Header File (Added by HALCOGEN)
+// Purpose: General Definitions relevant for all drivers (HALCOGEN-created)
+// ================================================================================
 /* USER CODE END */
 
 /* Include Files */
@@ -50,11 +54,17 @@
 #include "HL_sys_common.h"
 
 /* USER CODE BEGIN (1) */
-// header files for GIO, RTI, and CAN services
-#include "HL_gio.h"
-#include "HL_rti.h"
-#include "HL_sys_core.h"
-#include "HL_can.h"
+// ================================================================================
+// Section: Header Files (Added by user)
+// Purpose: Provides functions and capabilities needed for program execution
+// ================================================================================
+#include <stdlib.h>         // Memory Allocation/Freeing functions
+#include "HL_gio.h"         // General Input/Output capabilities (HALCOGEN-created)
+#include "HL_sys_core.h"    // System Core Interface functions (HALCOGEN-created)
+#include "HL_rti.h"         // Real-Time Interrupt (HALCOGEN-created)
+#include "HL_adc.h"         // ADC Conversion capabilities (HALCOGEN-created)
+#include "HL_het.h"         // Provides PWM capabilities (HALCOGEN-created)
+#include "HL_can.h"         // CAN communication capabilities (HALCOGEN-created)
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -66,33 +76,57 @@
 */
 
 /* USER CODE BEGIN (2) */
-// Pin Values
-/*
-int APPS_PIN = ;
-int BSE_PIN = ;
-int INTERRUPT_PIN = ;
-// Boolean Variables
-bool APPS = 0;
-bool BSE = 0;
-bool INTERRUPT = 0;
-*/
+// ================================================================================
+// Section: Pin Assignments
+// Purpose: Defines pin values associated with the microcontroller
+// ================================================================================
+// GIOA (General Purpose Pins)
+#define BMSFault 0              // BMS Fault Indicator
+#define BSPDFault 1             // BSPD Fault Indicator
+#define IMDFault 2              // IMD Fault Indicator
+#define StartButton 3           //
+#define TVToggle 4              //
+#define RegenToggle 5           //
+#define TractionToggle 6        //
+
+// N2HET2
+#define RTDS 23                 // Speaker Output
+#define BrakeLight 11           // Brake Light Output
+#define TimeDelay 10            //
+#define BMSLED 9                // LED Fault Output
+#define BSPDLED 14              // LED Fault Output
+#define IMDLED 22               // LED Fault Output
+
+// ================================================================================
+// Section: Global Variables
+// Purpose: Variables that will be passed to other functions for processing
+// ================================================================================
+int bseFlag = 0;
+
 /* USER CODE END */
 
 int main(void)
 {
 /* USER CODE BEGIN (3) */
-    // Initializations
-    gioInit();                  // General Input Output Pins
-    rtiInit();                  // ReTurn from Interrupt Functionality
-    canInit();                  // //Initiate DCAN module
-
+// ================================================================================
+// FUNCTION: main
+// Purpose: Starting point of program
+// ================================================================================
+// Section: Startup Initializations
+// Purpose: Start up microcontroller and initiate modules needed
+// ================================================================================
+    // Module initializations
+    gioInit();
+    rtiInit();
+    adcInit();
+    hetInit();
+    canInit();
 
     // Enable IRQ
     _enable_IRQ_interrupt_();
 
-    // Enable RTI Notification
+    // Setup RTI
     rtiEnableNotification(rtiREG1, rtiNOTIFICATION_COMPARE0);
-
 
     //Set Initial state of User LEDs
     gioSetBit(gioPORTB, 6, 1);
@@ -101,48 +135,56 @@ int main(void)
     // Start RTI counter
     rtiStartCounter(rtiREG1, rtiCOUNTER_BLOCK0);
 
-    /*Transmit data within tx_data buffer
-      canREG1 refers to DCAN module 1
-      canMESSAGE_BOX1 refers to CAN ID 0x01
-      tx_data is the data buffer being sent over CAN
-    */
-    canTransmit(canREG1,canMESSAGE_BOX1, tx_data);
-
-    // Run Forever (Will be interrupted to change states)
+    // Run forever on standby (Will be interrupted to change states)
     while (1);
-
-    /* Intended for main execution but not sure where to place yet
-    APPS = APPSINDICATOR();
-    BSE = BSEINDICATOR();
-    INTERRUPT = INTERRUPTINDICATOR();
-    while(1) {
-        if (APPS)  {
-            gioToggleBit(gioPORTA, APPS_PIN;
-        }
-                         
-        if (BSE)  {
-            gioToggleBit(gioPORTA, BSE_PIN;
-        }
-        if (INTERRUPT))  {
-            gioToggleBit(gioPORTA, INTERRUPT_PIN;
-        }
-    }
-    */
 
 /* USER CODE END */
 
     return 0;
 }
 
-
 /* USER CODE BEGIN (4) */
-//RTI Notification implementation
+// ================================================================================
+// Section: Secondary Functions
+// Purpose: Used during execution of main program. Executed via interrupt signals
+// ================================================================================
+// FUNCTION: fault
+// Purpose: Zeros all outputs when there is a fault detected. Specific behavior
+//          is generated depending on the caller value (which fault detected)
+// Caller Value      Fault Type
+//      0               BMS
+//      1               BSPD
+//      2               IMD
+//      3          Redundant ADC fail
+// ================================================================================
+void fault(int caller)
+{
+    // Set Dashboard (DASH) LEDs
+    if(caller == 0)
+        gioSetBit(hetPORT2, BMSLED, 1);
+    if(caller == 1)
+        gioSetBit(hetPORT2, BSPDLED, 1);
+    if(caller == 2)
+        gioSetBit(hetPORT2, IMDLED, 1);
+    // Disable Notifications if necessary
+    if(caller == 3)
+        rtiStopCounter(rtiREG1, rtiCOUNTER_BLOCK0);
+    // Wait forever (MCU must be reset via Master Switch to restart execution)
+    while(1);
+}
+// ================================================================================
+// Function: rtiNotification
+// Purpose: Implements Real Time Interrupt notifications
+// ================================================================================
 void rtiNotification(rtiBASE_t *rtiREG, uint32 notification)
 {
 gioToggleBit(gioPORTB, 6);
 gioToggleBit(gioPORTB, 7);
 }
-
+// ================================================================================
+// Function: checkPackets
+// Purpose: Verify that packets sent and received over CAN are intended values
+// ================================================================================
 //Function to verify that packets sent and received are intended values
 uint32_t checkPackets(uint8_t *src_packet,uint8_t *dst_packet,uint32_t psize){
     uint32_t err=0;
@@ -155,38 +197,27 @@ uint32_t checkPackets(uint8_t *src_packet,uint8_t *dst_packet,uint32_t psize){
     }
     return(err);
 }
+// ================================================================================
+// Functions: Extra CAN Functions
+// Purpose: All functions below need to be declared for CAN to function, but are
+// only used when using interrupt vectors for CAN. Still need to verify that packets
+// sent and received over CAN are intended values
+// ================================================================================
 
 // All functions below need to be declared for CAN to function, but
 // are only used when using intterupt vectors for CAN
 void canMessageNotification(canBASE_t *node, uint32_t messageBox){
     return;
 }
-
 void canErrorNotification(canBASE_t *node, uint32_t messageBox){
     return;
 }
-
 void esmGroup1Notification(unsigned channel){
     return;
 }
-
 void esmGroup2Notification(unsigned channel)
 {
     return;
 }
 
-/* All functions below are functions intended for operation
-// Detect APPS
-bool APPSINDICATOR() {
-    // fill
-}
-
-bool BSEINDICATOR() {
-    // fill
-}
-
-bool INTERRUPTINDICATOR() {
-    // fill
-}
-*/
 /* USER CODE END */
