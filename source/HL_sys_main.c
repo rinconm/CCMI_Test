@@ -84,10 +84,10 @@
 #define BMSFault 0              // BMS Fault Indicator
 #define BSPDFault 1             // BSPD Fault Indicator
 #define IMDFault 2              // IMD Fault Indicator
-#define StartButton 3           //
-#define TVToggle 4              //
+#define StartButton 3           // From Cockpit (Low Voltage Master Switch)
+#define TVToggle 4              // Torque Vector Switch (From DASH)
 #define RegenToggle 5           //
-#define TractionToggle 6        //
+#define TractionToggle 6        // Traction Switch (From DASH)
 
 // N2HET2
 #define RTDS 23                 // Speaker Output
