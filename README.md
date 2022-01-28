@@ -12,7 +12,8 @@ The CCMI controls various functions of the FSAE race car including motor speed, 
 
 
 ## Team Info
-Code written by: Marcos Rincon\
+Code written by: Embedded Subteam of Anteater Electric Racing Team (AER) at UC Irvine.\
+Modified by: Marcos Rincon\
 CCMI Designed by: Electronics Subteam of Anteater Racing (AER) at the University of California, Irvine\
 Advised by: Dr. J. Michael McCarthy
 
