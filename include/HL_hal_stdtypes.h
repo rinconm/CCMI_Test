@@ -46,6 +46,11 @@
 #define __HAL_STDTYPES_H__
 
 /* USER CODE BEGIN (0) */
+/*********************************************************************************/
+/* Program: HL_hal_stdtypes.h                                                    */
+/* Purpose: HALCOGEN-generated type, symbol, and global definitions              */
+/* Author:  TI                                                                   */
+/*********************************************************************************/
 /* USER CODE END */
 
 #include <stdint.h>
