@@ -24,5 +24,3 @@ HALCOGEN\
 IDE used to edit, compile, and debug user code:\
 Code Composer Studio
 
-Documentation and resources:/
-UCI's Anteater Racing (AER)
