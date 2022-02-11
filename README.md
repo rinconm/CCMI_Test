@@ -3,7 +3,7 @@ Embedded code to test the TI Hercules LAUNCHXL2-570LC43/RM57Lx on the Central Co
 
 ## Folder and File Contents
 /source: Location for the source code with function definitions.\
-/include: Location for the header files containing function declarations and definitions of the API.\
+/include: Location for the header files containing function declarations and definitions of the API.
 
 main program: HL_sys_main.c
 
