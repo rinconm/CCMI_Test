@@ -13,8 +13,8 @@ The CCMI controls various functions including motor speed, brake lights, accumul
 
 
 ## Team Info
-Original code written by: 2019 Embedded Subteam of Anteater Electric Racing Team (AER) at UC Irvine.\
-Modified and annotated by: Marcos Rincon\
+Original Code Written by: 2019 Embedded Subteam of Anteater Electric Racing Team (AER) at UC Irvine.\
+Modified and Annotated by: Marcos Rincon\
 CCMI Designed by: Electronics Subteam of Anteater Racing (AER) at the University of California, Irvine\
 Advised by: Dr. J. Michael McCarthy
 
