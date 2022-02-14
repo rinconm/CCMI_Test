@@ -44,21 +44,28 @@
 
 /* USER CODE BEGIN (0) */
 /*********************************************************************************/
+/*********************************************************************************/
 /* Program: HL_sys_main.c                                                        */
 /* Purpose: Source code for the main microcontroller of the Ampeater EVO system  */
-/* Authors: Marcos Rincon, Anteater Electric Racing Team                         */
+/* Authors: Anteater Electric Racing Team, Marcos Rincon                         */
 /*                                                                               */
 /* Version History                                                               */
-/* 01/28/22 MR  Modified fault functions and commented out full descriptions     */
+/* 01/28/22 MR  Modified fault functions and commented out descriptions          */
 /* 12/05/21 MR  Added initialization functions                                   */
 /* 11/02/19 JM  Initial Version                                                  */
 /*********************************************************************************/
+/*********************************************************************************/
 
 /*********************************************************************************/
-/* Section: Preprocessor Directives (HALCOGEN-created)                           */
-/* Purpose: General definitions relevant for all drivers. In other words, this   */
-/*          file defines keywords and definitions for types, symbols, and more   */
-/*          for program execution. 
+/* Section: Header Files                                                         */
+/* Purpose: These files define keywords, constants, and definitions for custom   */
+/*          types, symbols, and more for program execution. Provides module      */
+/*          abstraction to improve program readability.                          */
+/* Notes  : HALCOGEN-generated header files start with HL_. These files were     */
+/*          automatically generated when choosing desired modules in the HALCOGEN*/
+/*          IDE.                                                                 */
+/*          Each line of code gets replaced with the .h file during the pre-     */
+/*          processing step of the compilation process.
 /*********************************************************************************/
 /* USER CODE END */
 
@@ -67,13 +74,9 @@
 #include "HL_sys_common.h"
 
 /* USER CODE BEGIN (1) */
-/*********************************************************************************/
-/* Section: Header Files (Added by user)                                         */
-/* Purpose: Provides constants, declarations, and functions needed for program   */
-/*          execution. Provides module abstraction.                              */
-/*********************************************************************************/
+
 /* System libraries */
-#include <stdlib.h>         /* Static memory Allocation/Freeing functions */
+#include <stdlib.h>         /* Static Memory Allocation/Freeing functions */
 /* HALCOGEN-generated header files */
 #include "HL_gio.h"         /* General Input/Output capabilities */
 #include "HL_sys_core.h"    /* System Core Interface functions */
@@ -81,6 +84,7 @@
 #include "HL_adc.h"         /* Analog to Digital (ADC) Conversion capabilities */
 #include "HL_het.h"         /* Pulse Width Modulation (PWM) capabilities) */
 #include "HL_can.h"         /* CAN communication capabilities */
+
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -93,31 +97,10 @@
 
 /* USER CODE BEGIN (2) */
 /*********************************************************************************/
-/* Section: Global Constants/Parameters                                          */
-/* Purpose: Defines pin values associated with the microcontroller               */
+/* Section: Global Constants/Parameters/Variables                                */
+/* Purpose: Variables/values that will be passed to functions for processing     */
 /*********************************************************************************/
-/* */
-#define BRAKE_APPLIED_CUTOFF 400
-#define PWM_PERIOD 100
-#define BATTERY_TEMP_FAN_TURNON 0xFFF
-
-/* */
-#define DEADZONE_LOW 1536
-#define DEADZONE_HIGH 2560
-/* N2HET2 Parameters */
-#define TimeDelay 10            /* Timing frequency (Time Period) */
-
-//PWM Channels
-#define ThrottleL pwm0
-#define ThrottleR pwm1
-#define RegenL    pwm2
-#define RegenR    pwm3
-#define Fans      pwm4
-
-/*********************************************************************************/
-/* Section: Microcontroller Pin Assignments                                      */
-/* Purpose: Defines pin values associated with the microcontroller               */
-/*********************************************************************************/
+/** Microcontroller Pin Assignments **/
 /* GIOA (General Purpose Pins) */
 #define BMSFault       0        /* BMS Fault Indicator */
 #define BSPDFault      1        /* BSPD Fault Indicator */
@@ -133,10 +116,24 @@
 #define IMDLED     22           /* LED Fault Output */
 #define RTDS       23           /* Speaker Output */
 
-/*********************************************************************************/
-/* Section: Global Variables                                                     */
-/* Purpose: Variables that will be passed to other functions for processing      */
-/*********************************************************************************/
+/* System Parameters */
+#define BRAKE_APPLIED_CUTOFF 400
+#define BATTERY_TEMP_FAN_TURNON 0xFFF
+#define DEADZONE_LOW 1536
+#define DEADZONE_HIGH 2560
+
+/* N2HET2 Parameters */
+#define TimeDelay 10
+
+/* PWM Channel Parameters */
+#define PWM_PERIOD 100
+#define ThrottleL pwm0
+#define ThrottleR pwm1
+#define RegenL    pwm2
+#define RegenR    pwm3
+#define Fans      pwm4
+
+/* Global scope variables */
 int bseFlag = 0;                /* Brake Systen Encoder Fault Flag */
 int timeDelayFlag = 0;          /* */
 int compare2Counter = 0;        /* */
@@ -146,32 +143,32 @@ int compare2Counter = 0;        /* */
 /* Purpose: Declares the functions/algorithms that our team created. (Declared   */
 /*          here and defined below).                                             */
 /*********************************************************************************/
-/* */
+/* Converts input analog signals from  to digital values in an array */
 void adcConversion(unsigned int *adcArray);
-/* */
+/* Check if there's an Acceleration Pedal Position Sensor fault */
 int APPSFault(int);
-/* */
+/* Check if brakes are calibrated correctly (must be under the defined cutoff value */
 int brakeCheck();
-/* */
+/* Check if there's a Brake System Encoder fault */
 int BSEFault(unsigned int accel1,
              unsigned int accel2,
              unsigned int brake);
-/* */
+/* Stalls the whole program if a BMS, BSPD, IMD, or Redundant ADC fault detected */
 void fault(int caller);
-/* */
+/* Outputs the motor torque generated by the TVA to the motor controller board*/
 void motorOutput(unsigned int *outputArray);
-/* */
+/* Initializes PWM values for motor operation to zero */
 void pwmSetup();
-/* */
+/* Startup required modules */
 void startup();
-/* */
+/* The torque vector algorithm used to determine motor torque output */
 void TVA(unsigned int *outputArray,
          unsigned int *adcArray);
-/* */
+/* Receive data being transmitted over CAN bus  */
 void getAllCANData(uint8_t *canData);
-/* */
+/* Broadcast data over CAN bus */
 void sendAllDataOBD(uint8_t *canData);
-/* */
+/* Acknowledge packets received over CAN bus */
 uint32_t checkPackets(uint8_t  *src_packet,
                       uint8_t  *dst_packet,
                       uint32_t psize);
@@ -180,8 +177,10 @@ uint32_t checkPackets(uint8_t  *src_packet,
 
 /* USER CODE BEGIN (3) */
 /*********************************************************************************/
+/*********************************************************************************/
 /* FUNCTION: main                                                                */
 /* Purpose : Global starting point of entire program                             */
+/*********************************************************************************/
 /*********************************************************************************/
 int main(void)
 {
@@ -195,9 +194,6 @@ int main(void)
     adcInit();
     hetInit();
     canInit();
-
-    ///* Enable IRQ Functionality*/
-    //_enable_IRQ_interrupt_();
 
     /** Setup RTI Functionality **/
     /* Enable ADC/Torque Interrupt */
@@ -214,10 +210,6 @@ int main(void)
     adcCalibration(adcREG1);
     adcCalibration(adcREG2);
 
-    ///* Set Initial state of User LEDs */
-    //gioSetBit(gioPORTB, 6, 1);
-    //gioSetBit(gioPORTB, 7, 0);
-
     //Setup PWM outputs
     pwmSetup();
 
@@ -229,6 +221,7 @@ int main(void)
     gioDisableNotification(gioPORTA, StartButton);  //Make sure start button is disabled
     /* Start RTI counter (Timer) */
     rtiStartCounter(rtiREG1, rtiCOUNTER_BLOCK0);
+
 /*********************************************************************************/
 /* Section: Standby mode                                                         */
 /* Purpose: Main state of the program. Keeps looping until an interrupt vector   */
@@ -244,8 +237,10 @@ int main(void)
 
 /* USER CODE BEGIN (4) */
 /*********************************************************************************/
+/*********************************************************************************/
 /* Section: Secondary Functions                                                  */
 /* Purpose: Used during execution of main program. Called  via interrupt signals */
+/*********************************************************************************/
 /*********************************************************************************/
 
 //gioNotification
